@@ -2,18 +2,17 @@ import random
 import sys
 
 project_list = {         # (price for minute, average minutes per day)
-    0: ('Mitsubishi', 5, 300),
-    1: ('Cian', 7, 450),
-    2: ('Роспоребнадзор', 4, 260),
-    3: ('Велодрайв', 9, 180),
-    4: ('Сбербанк', 2, 240)
+    1: ('Mitsubishi', 5, 300),
+    2: ('Cian', 7, 450),
+    3: ('Роспоребнадзор', 4, 260),
+    4: ('Велодрайв', 9, 180),
+    5: ('Сбербанк', 2, 240)
 }
 operators = {
     0: ('Коновалова С.', 200, [2, 5]),  # (salary per hour, [projects working at])
     1: ('Светов М.', 150, [1, 3]),
     2: ('Людов Г.', 250, [2, 4, 5]),
-    3: ('Семиренко Д.', 170, [3, 4]),
-    4: (' ', 230, [5])
+    3: ('Семиренко Д.', 170, [3, 4])
 }
 
 
@@ -23,7 +22,7 @@ class Population:
         self.compare_buffer = 0
         self.pairs = []
         self.specimens = []
-        self.ancestors = []
+        self.genes = []
         self.constraint = constraint
         self.reversed_sum = 0
         self.coefficients = []
@@ -31,12 +30,12 @@ class Population:
         self.offspring = []
         self.compare = []
         self.generation_counter = 0
-        for a in range(5):  # number of ancestors
-            self.genes = []
-            for i in range(5):  # number of chromosomes in an ancestor
-                self.genes.append(random.randint(3, 12))
-            self.ancestors.append(self.genes)
-        print('All random integers (genes): ' + str(self.ancestors))
+        for a in range(5):
+            self.ancestors = []
+            for i in range(4):
+                self.ancestors.append(random.randint(3, 12))
+            self.genes.append(self.ancestors)
+        print('All random integers (genes): ' + str(self.genes))
 
     def count_income(self, random_hours):
         self.total = 0
@@ -59,14 +58,14 @@ class Population:
     def test(self, genes_list):  # generate 5 specimens out of the equation
         self.specimens = []
         self.coefficients = []
-        for i in range(len(self.ancestors)):  # number of specimens generated
+        for i in range(5):  # number of specimens generated
             test_genes = []
-            for j in range(len(self.ancestors)):
+            for j in range(4):
                 test_genes.append(genes_list[i][j])
             # print("Test genes are".format(test_genes))
             self.specimens.append(self.count_income(test_genes))
             self.coefficients.append(abs(int(self.specimens[i]) - self.constraint))
-            if self.coefficients[i] < 100:  # the answer
+            if self.coefficients[i] < 10:  # the answer
                 print('Done, the answer is {}'.format(genes_list[i]))
                 sys.exit()
             self.reversed_sum += 1 / self.coefficients[i]   # get a sum of reversed coefficients
@@ -78,20 +77,22 @@ class Population:
         # print('Reversed sum: ' + str(self.reversed_sum))
 
         self.probabilities = []
-        for i in range(len(self.ancestors)):  # probability of each chromosome
+        for i in range(5):  # probability of each chromosome
             self.probabilities.append((1 / self.coefficients[i]) / self.reversed_sum)
         # print('Probabilities: ' + str(self.probabilities))
 
     def breed(self, population):  # generate new offspring
-        for i in range(len(self.ancestors)):
+        i = 0
+        while i < 5:
             ch = random.choices(population=population, weights=self.probabilities, k=2)
             if ch[0] != ch[1]:
                 self.pairs.append(ch)
+                i += 1
             else:
                 pass
         # print('Pairs of parents: ' + str(self.pairs))
         self.offspring = []
-        for i in range(len(self.ancestors)):
+        for i in range(5):
             crossover = random.choice([[self.pairs[i][0][:1] + self.pairs[i][1][1:]],
                                        [self.pairs[i][0][:2] + self.pairs[i][1][2:]],
                                        [self.pairs[i][0][:3] + self.pairs[i][1][3:]]])
@@ -101,7 +102,7 @@ class Population:
 
     def mutate(self):  # change random digit in a random chromosome
         # print(self.offspring)
-        self.offspring[random.randint(0, 4)][random.randint(0, 4)] = random.randint(3, 12)
+        self.offspring[random.randint(0, 4)][random.randint(0, 3)] = random.randint(3, 12)
         # print(self.offspring)
         self.compare_buffer = self.compare[1]
         p.compare = []
@@ -111,8 +112,8 @@ class Population:
 
 p = Population(8000)
 # p.count_income(p.genes)
-p.test(p.ancestors)
-p.breed(p.ancestors)
+p.test(p.genes)
+p.breed(p.genes)
 p.test(p.offspring)
 while True:
     while p.compare[1] < p.compare[0]:  # mutate when offspring is less viable
