@@ -15,7 +15,6 @@ operators = {
     4: (' ', 230, [5])
 }
 p = Population(operators, project_list, 5000)
-# p.count_income(p.genes)
 p.test(p.ancestors)
 p.breed(p.ancestors)
 p.test(p.offspring)
