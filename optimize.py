@@ -1,30 +1,17 @@
 import random
 import sys
 
-project_list = {         # (price for minute, average minutes per day)
-    0: ('Mitsubishi', 5, 300),
-    1: ('Cian', 7, 450),
-    2: ('Роспоребнадзор', 4, 260),
-    3: ('Велодрайв', 9, 180),
-    4: ('Сбербанк', 2, 240)
-}
-operators = {
-    0: ('Коновалова С.', 200, [2, 5]),  # (salary per hour, [projects working at])
-    1: ('Светов М.', 150, [1, 3]),
-    2: ('Людов Г.', 250, [2, 4, 5]),
-    3: ('Семиренко Д.', 170, [3, 4]),
-    4: (' ', 230, [5])
-}
-
 
 class Population:
-    def __init__(self, constraint):
+    def __init__(self, operators, project_list, constraint):
         self.total = 0
         self.compare_buffer = 0
         self.pairs = []
         self.specimens = []
         self.ancestors = []
         self.constraint = constraint
+        self.operators = operators
+        self.project_list = project_list
         self.reversed_sum = 0
         self.coefficients = []
         self.probabilities = []
@@ -40,14 +27,14 @@ class Population:
 
     def count_income(self, random_hours):
         self.total = 0
-        for operator in operators.items():  # 1: (a, 100, [1, 2 ...])
+        for operator in self.operators.items():  # 1: (a, 100, [1, 2 ...])
             operator_projects = []
             operator_income = 0
             time = random_hours[operator[0]]
-            for project in project_list.keys():  # 1, 2 ...
+            for project in self.project_list.keys():  # 1, 2 ...
                 if project in operator[1][2]:
                     operator_projects.append(project)
-                    operator_income += project_list[project][1] * project_list[project][2]
+                    operator_income += self.project_list[project][1] * self.project_list[project][2]
             final_income = operator_income - operator[1][1] * time
             # print("{0}\nHours: {1}\n".
             #       format(op[1][0], time))
@@ -107,4 +94,3 @@ class Population:
         self.compare = []
         self.test(self.offspring)
         self.compare.insert(0, self.compare_buffer)
-
