@@ -124,4 +124,3 @@ while True:
         p.compare = []
         p.test(p.offspring)
         p.compare.insert(0, p.compare_buffer)
-
