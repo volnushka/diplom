@@ -83,12 +83,12 @@ class Population:
         # print('Probabilities: ' + str(self.probabilities))
 
     def breed(self, population):  # generate new offspring
-        for i in range(len(self.ancestors)):
+        i = 0
+        while i < len(self.ancestors):
             ch = random.choices(population=population, weights=self.probabilities, k=2)
             if ch[0] != ch[1]:
                 self.pairs.append(ch)
-            else:
-                pass
+                i += 1
         # print('Pairs of parents: ' + str(self.pairs))
         self.offspring = []
         for i in range(len(self.ancestors)):
@@ -123,4 +123,3 @@ while True:
         p.compare = []
         p.test(p.offspring)
         p.compare.insert(0, p.compare_buffer)
-
