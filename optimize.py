@@ -17,7 +17,7 @@ class Population:
         self.probabilities = []
         self.offspring = []
         self.compare = []
-        self.generation_counter = 0
+        self.generation_counter = 1
         for a in range(5):  # number of ancestors
             self.genes = []
             for i in range(5):  # number of chromosomes in an ancestor
@@ -70,6 +70,7 @@ class Population:
         # print('Probabilities: ' + str(self.probabilities))
 
     def breed(self, population):  # generate new offspring
+        print('Breeding...')
         i = 0
         while i < len(self.ancestors):
             ch = random.choices(population=population, weights=self.probabilities, k=2)
@@ -87,7 +88,7 @@ class Population:
         # print('Next generation: ' + str(self.offspring))
 
     def mutate(self):  # change random digit in a random chromosome
-        # print(self.offspring)
+        print('Mutating...')
         self.offspring[random.randint(0, 4)][random.randint(0, 4)] = random.randint(3, 12)
         # print(self.offspring)
         self.compare_buffer = self.compare[1]
