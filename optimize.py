@@ -65,8 +65,8 @@ class Population:
             # print("Test genes are".format(test_genes))
             self.specimens.append(self.count_income(test_genes))
             self.coefficients.append(abs(int(self.specimens[i]) - self.constraint))
-            if self.coefficients[i] < 10:  # the answer
-                print('Done, the answer is {}'.format(genes_list[i]))
+            if self.coefficients[i] == 0:  # the answer
+                print('Done, the answer is {0}\nSurvivors: {1}'.format(genes_list[i], self.specimens))
                 sys.exit()
             self.reversed_sum += 1 / self.coefficients[i]   # get a sum of reversed coefficients
         print('Generation: {0}\nSpecimens: {1}\n'.format(self.generation_counter, self.specimens))
