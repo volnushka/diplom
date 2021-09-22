@@ -79,7 +79,7 @@ class Population:
         self.probabilities = []
         for i in range(5):  # probability of each chromosome
             self.probabilities.append((1 / self.coefficients[i]) / self.reversed_sum)
-        # print('Probabilities: ' + str(self.probabilities))
+        print('Probabilities: ' + str(self.probabilities))
 
     def breed(self, population):  # generate new offspring
         i = 0
@@ -90,7 +90,7 @@ class Population:
                 i += 1
             else:
                 pass
-        # print('Pairs of parents: ' + str(self.pairs))
+        print('Pairs of parents: ' + str(self.pairs))
         self.offspring = []
         for i in range(5):
             crossover = random.choice([[self.pairs[i][0][:1] + self.pairs[i][1][1:]],
@@ -98,7 +98,7 @@ class Population:
                                        [self.pairs[i][0][:3] + self.pairs[i][1][3:]]])
             self.offspring.extend(crossover)
         self.generation_counter += 1
-        # print('Next generation: ' + str(self.offspring))
+        print('Next generation: ' + str(self.offspring))
 
     def mutate(self):  # change random digit in a random chromosome
         # print(self.offspring)
@@ -110,7 +110,7 @@ class Population:
         p.compare.insert(0, self.compare_buffer)
 
 
-p = Population(8000)
+p = Population(11000)
 # p.count_income(p.genes)
 p.test(p.genes)
 p.breed(p.genes)
